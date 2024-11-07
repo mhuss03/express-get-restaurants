@@ -40,11 +40,11 @@ describe("Testing Endpoints", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       id: 1,
-      name: "AppleBees",
-      location: "Texas",
+      name: "Mcdonalds",
+      location: "Paris",
       cuisine: "FastFood",
       createdAt: "2024-11-06T14:22:12.037Z",
-      updatedAt: "2024-11-06T14:22:12.037Z",
+      updatedAt: "2024-11-06T14:22:34.800Z",
     });
   });
 
@@ -54,6 +54,21 @@ describe("Testing Endpoints", () => {
       .send({ name: "KFC", location: "London", cuisine: "FastFood" });
     expect(response.status).toBe(200);
     expect(response.body.message).toEqual("Successful");
+  });
+
+  test("POST Bad Request /restaurant", async () => {
+    const response = await request(app)
+      .post("/restaurant")
+      .send({ name: "KFC", location: "London" });
+    expect(response.status).toBe(200);
+    expect(response.body.error).toEqual([
+      {
+        type: "field",
+        msg: "Invalid value",
+        path: "cuisine",
+        location: "body",
+      },
+    ]);
   });
 
   test("PUT /restaurant/1", async () => {
